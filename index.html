@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Master Works Of Art Web Service</title>
+  <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <style>
+    .thumbnail img {
+      float:right;
+      padding:20px;
+    }
+    .thumbnail {
+      min-height: 350px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Main jumbotron for a primary marketing message or call to action -->
+  <div class="jumbotron">
+    <div class="container">
+      <h1 id="title">Master Works Of Art Web Service</h1>
+      <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+      <p><a class="btn btn-primary btn-lg category" href="title" role="button">Show Works by Title</a></p>
+      <p><a class="btn btn-primary btn-lg category" href="artist" role="button">Show Works by Artist</a></p>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <h2 id="cat-title"></h2>
+      <div id="art-works">
+      </div>
+    </div>
+
+    <hr>
+
+    <footer>
+      <p>&copy; Alex Aragon 2015</p>
+    </footer>
+  </div> <!-- /container -->
+
+<script src="//code.jquery.com/jquery-latest.js" type="text/javascript"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.1/underscore-min.js"></script>
+  
+<script type="text/javascript">
+$(document).ready(function() {  
+
+  $('.category').click(function(e){
+    e.preventDefault(); //stop default action of the link
+    var cat = $(this).attr("href");  //get category from URL
+    loadAJAX(cat);  //load AJAX and parse JSON file
+  });
+  
+});
+
+function loadAJAX(cat)
+{
+  $.ajax({  
+    type: "GET",
+    dataType: "json",  
+    url: "api.php?cat=" + cat,
+    success: parseJSON
+  });
+  $('#art-works').html('');//clear data
+  $('#cat-title').html('Loading...');//clear data
+}
+
+function toConsole(data)
+{//return data to console for JSON examination
+  console.log(data); //to view,use Chrome console, ctrl + shift + j
+}
+
+function parseJSON(data){
+  var header = data.title;
+  $('#cat-title').html(header);
+  //console.log(data['art works']);
+  //$('#art-works').html('');//clear data
+  _.each(data['art works'], function(item) {
+    parseItem(item);
+  })
+}
+function parseItem(item){
+  var text = '<div class="col-sm-6 col-md-4">';
+  text += '<div class="thumbnail">';
+  text += '<img src="'+item.Image+'" alt="'+item.Title+'">';
+  text += '<div class="caption">';
+  text += '<h3>Title: '+item.Title+'</h3>';
+  text += '<p>Artist: '+item.Artist+'</p>';
+  text += '<p>Year (Approximate): '+item['Year (Approximate)']+'</p>';
+  text += '<p>Movement: '+item.Movement+'</p>';
+  text += '<p>Location: '+item.Location+'</p>';
+  text += '</div>'; // End caption
+  text += '</div>'; // End thumbnail
+  text += '</div>'; // End col-sm-6 col-md-4
+  $(text).appendTo('#art-works'); 
+}
+</script>
+</body>
+</html>
