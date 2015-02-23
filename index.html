@@ -23,6 +23,7 @@
       <h1 id="title">Master Works Of Art Web Service</h1>
       <p><a class="btn btn-primary btn-lg category" href="title" role="button">Show Works by Title</a></p>
       <p><a class="btn btn-primary btn-lg category" href="artist" role="button">Show Works by Artist</a></p>
+      <p><a class="btn btn-primary btn-lg" id="sort-year" href="year" role="button">Show Works by Year Created</a></p>
     </div>
   </div>
   <div class="container">
@@ -51,17 +52,31 @@ $(document).ready(function() {
     var cat = $(this).attr("href");  //get category from URL
     loadAJAX(cat);  //load AJAX and parse JSON file
   });
+
+  $('#sort-year').click(function(e){
+    e.preventDefault(); //stop default action of the link
+    loadAJAX('data', 'sortYear');  //load AJAX and parse JSON file
+  });
   
 });
 
-function loadAJAX(cat)
+function loadAJAX(cat, filter)
 {
+
+  var successFunc = parseJSON;//parseJSON by default
+  filter = filter || "";
+  
+  if(filter == 'sortYear'){
+    successFunc = sortByYear;
+  }
+
   $.ajax({  
     type: "GET",
     dataType: "json",  
     url: "api.php?cat=" + cat,
-    success: parseJSON
+    success: successFunc
   });
+
   $('#art-works').html('');//clear data
   $('#cat-title').html('Loading...');//clear data
 }
@@ -69,6 +84,16 @@ function loadAJAX(cat)
 function toConsole(data)
 {//return data to console for JSON examination
   console.log(data); //to view,use Chrome console, ctrl + shift + j
+}
+function sortByYear(data){
+  var header = 'Works by Year Created';
+  $('#cat-title').html(header);
+  //console.log(data['art works']);
+  //$('#art-works').html('');//clear data
+  var sortByYearData = _.sortBy(data['art works'], 'Year (Approximate)');
+  _.each(sortByYearData, function(item) {
+    parseItem(item);
+  })
 }
 
 function parseJSON(data){
