@@ -65,7 +65,7 @@ function loadAJAX(cat, filter)
 
   var successFunc = parseJSON;//parseJSON by default
   filter = filter || "";
-  
+
   if(filter == 'sortYear'){
     successFunc = sortByYear;
   }
@@ -91,9 +91,7 @@ function sortByYear(data){
   //console.log(data['art works']);
   //$('#art-works').html('');//clear data
   var sortByYearData = _.sortBy(data['art works'], 'Year (Approximate)');
-  _.each(sortByYearData, function(item) {
-    parseItem(item);
-  })
+  _.each(sortByYearData, parseItem);
 }
 
 function parseJSON(data){
@@ -101,9 +99,7 @@ function parseJSON(data){
   $('#cat-title').html(header);
   //console.log(data['art works']);
   //$('#art-works').html('');//clear data
-  _.each(data['art works'], function(item) {
-    parseItem(item);
-  })
+  _.each(data['art works'], parseItem);
 }
 function parseItem(item){
   var text = '<div class="col-sm-6 col-md-4">';
