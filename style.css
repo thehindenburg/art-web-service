@@ -1,0 +1,43 @@
+#results {
+display: block;
+position: relative;
+max-width: 1000px;
+margin: 0 auto;
+}
+.displayoptions {
+text-align: center;
+background-color: #005fae;
+color: white;
+margin: 10px;
+padding: 10px;
+border-radius: 5px;
+min-height: 130px;
+}
+div > h3 {
+position: relative;
+display: flex;
+margin-left: 5px;
+}
+img {
+position: relative;
+float: left;
+height: 128px;
+}
+.theInfo {
+padding: 0 15px;
+float: left;
+}
+body{
+	background-color: #8FBEE5;
+	margin: 0;
+}
+header {
+background: #3A99E8;
+margin: 0 auto;
+padding: 10px;
+text-align: center;
+color: white;
+}
+#results h1 {
+	color: white;
+}

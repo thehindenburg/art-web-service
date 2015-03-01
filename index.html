@@ -4,118 +4,42 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="js/angular.min.js"></script>
+  <script type="text/javascript" src="controller/app.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
   <title>Master Works Of Art Web Service</title>
-  <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-  <style>
-    .thumbnail img {
-      float:right;
-      padding:20px;
-    }
-    .thumbnail {
-      min-height: 350px;
-    }
-  </style>
 </head>
-<body>
-  <!-- Main jumbotron for a primary marketing message or call to action -->
-  <div class="jumbotron">
-    <div class="container">
-      <h1 id="title">Master Works Of Art Web Service</h1>
-      <p><a class="btn btn-primary btn-lg category" href="title" role="button">Show Works by Title</a></p>
-      <p><a class="btn btn-primary btn-lg category" href="artist" role="button">Show Works by Artist</a></p>
-      <p><a class="btn btn-primary btn-lg" id="sort-year" href="year" role="button">Show Works by Year Created</a></p>
+<body ng-app="art">
+  <div ng-controller="theArt">
+    <header>
+      <h1> Collection of Art!</h2>
+        <h3> choose how you'd like to view your art, and if you'd like to filter it!</h3>
+    <button ng-click="byArtist()">Click Me for by Artist!</button>
+    <button ng-click="byTitle()">Click Me for by Title!</button>
+    <h3>Filter by Country the Art is Located</h3>
+    <select ng-model="f.Country">
+      <option></option>
+      <option ng-repeat="item in loc">{{item}}</option>
+    </select>
+    <h3> Filter by Artistic Movement</h3>
+        <select ng-model="f.Movement">
+          <option></option>
+      <option ng-repeat="item in movement">{{item}}</option>
+    </select>
+  </header>
+    <div id="results">
+      <h1 ng-hide="filteredPaintings.length || !paintings">There are no Paintings that fit the Search!</h1>
+    <div ng-repeat="item in filteredPaintings = (paintings | filter:f)" class="displayoptions">
+      <img ng-src="{{item.Image}}">
+      <div class="theInfo">
+      <h3 class="arttitle">Title: <b>{{item.Title}}</b></h3>
+      <h3 class="artartist">Artist: <b>{{item.Artist}}</b></h3>
+      <p> Location: {{item.Location}}  Movement: {{item.Movement}}</p>
+    </div>
+    </div>
     </div>
   </div>
-  <div class="container">
-    <div class="row">
-      <h2 id="cat-title"></h2>
-      <div id="art-works">
-      </div>
-    </div>
-
-    <hr>
-
-    <footer>
-      <p>&copy; Alex Aragon 2015</p>
-    </footer>
-  </div> <!-- /container -->
-
-<script src="//code.jquery.com/jquery-latest.js" type="text/javascript"></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.1/underscore-min.js"></script>
-  
-<script type="text/javascript">
-$(document).ready(function() {  
-
-  $('.category').click(function(e){
-    e.preventDefault(); //stop default action of the link
-    var cat = $(this).attr("href");  //get category from URL
-    loadAJAX(cat);  //load AJAX and parse JSON file
-  });
-
-  $('#sort-year').click(function(e){
-    e.preventDefault(); //stop default action of the link
-    loadAJAX('data', 'sortYear');  //load AJAX and parse JSON file
-  });
-  
-});
-
-function loadAJAX(cat, filter)
-{
-
-  var successFunc = parseJSON;//parseJSON by default
-  filter = filter || "";
-
-  if(filter == 'sortYear'){
-    successFunc = sortByYear;
-  }
-
-  $.ajax({  
-    type: "GET",
-    dataType: "json",  
-    url: "api.php?cat=" + cat,
-    success: successFunc
-  });
-
-  $('#art-works').html('');//clear data
-  $('#cat-title').html('Loading...');//clear data
-}
-
-function toConsole(data)
-{//return data to console for JSON examination
-  console.log(data); //to view,use Chrome console, ctrl + shift + j
-}
-function sortByYear(data){
-  var header = 'Works by Year Created';
-  $('#cat-title').html(header);
-  //console.log(data['art works']);
-  //$('#art-works').html('');//clear data
-  var sortByYearData = _.sortBy(data['art works'], 'Year (Approximate)');
-  _.each(sortByYearData, parseItem);
-}
-
-function parseJSON(data){
-  var header = data.title;
-  $('#cat-title').html(header);
-  //console.log(data['art works']);
-  //$('#art-works').html('');//clear data
-  _.each(data['art works'], parseItem);
-}
-function parseItem(item){
-  var text = '<div class="col-sm-6 col-md-4">';
-  text += '<div class="thumbnail">';
-  text += '<img src="'+item.Image+'" alt="'+item.Title+'">';
-  text += '<div class="caption">';
-  text += '<h3>Title: '+item.Title+'</h3>';
-  text += '<p>Artist: '+item.Artist+'</p>';
-  text += '<p>Year (Approximate): '+item['Year (Approximate)']+'</p>';
-  text += '<p>Movement: '+item.Movement+'</p>';
-  text += '<p>Location: '+item.Location+'</p>';
-  text += '</div>'; // End caption
-  text += '</div>'; // End thumbnail
-  text += '</div>'; // End col-sm-6 col-md-4
-  $(text).appendTo('#art-works'); 
-}
-</script>
+  <!-- Main jumbotron for a primary marketing message or call to action -->
+ <p> Based off the great work of Alex Aragon who's API documentation can be found here: <a href='https://docs.google.com/document/d/1AGbyAiRwWxau3_qy1AgERFB7o6hr5Y6WlKcEj5cpcXw/'> Click here </a>
 </body>
 </html>
