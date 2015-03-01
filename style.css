@@ -21,14 +21,16 @@ margin-left: 5px;
 img {
 position: relative;
 float: left;
-height: 128px;
+size: auto;
+height: 130px;
+max-width: 170px;
 }
 .theInfo {
 padding: 0 15px;
 float: left;
 }
 body{
-	background-color: #8FBEE5;
+	background-color: #EAF6FF;
 	margin: 0;
 }
 header {
@@ -40,4 +42,11 @@ color: white;
 }
 #results h1 {
 	color: white;
+}
+button {
+height: 75px;
+font-size: 15pt;
+}
+select {
+font-size: 16pt;
 }
